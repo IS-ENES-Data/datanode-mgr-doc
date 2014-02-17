@@ -1,0 +1,74 @@
+\section{Purpose and limitations}
+The purpose of this document is to serve as an unambigious single resource for reference by administrators of IS-ENES2 ESGF datanodes, to configure their datanodes and publish data in compliance with regulations discussed and adopted by all datanode managers. This document aggregates information from sources such as the Trieste meeting notes \cite{trieste}, Martin Juckes' `CORDEX: ESGF Search Facet Mappings' document \cite{cordexfacetsdoc} and other discussions which have led to collective consensus. This document only contains information from the perspective of publishing/maintaining data on the ESGF datanode and may not be refered to for any other purpose.
+
+\section{IS-ENES2 ESGF datanode Search Facet Configuration}
+IS-ENES2 ESGF datanodes have some additional search facets pertaining to CORDEX. Here below are the entire list of facets used, in an IS-ENES2 ESGF datanode\\
+\vspace{1mm}\\
+Filename: \texttt{facets.properties}\\
+Standard location: \texttt{/esg/config/facets.properties}
+\begin{verbatimtab}[4]
+project=0:Project:optional_project_description
+institute=1:Institute:optional_institute_description
+model=2:Model:optional_model_description
+source_id=3:Instrument:optional_instrument_description
+experiment_family=4:Experiment Family:optional_experiment_family_description
+experiment=5:Experiment:optional_experiment_description
+time_frequency=6:Time Frequency:optional_time_frequency_description
+product=7:Product:optional_product_description
+realm=8:Realm:optional_realm_description
+variable=9:Variable:optional_variable_description
+variable_long_name=10:Variable Long Name:optional_variable_long_name_description
+cmor_table=11:CMIP Table:optional_cmor_table_description
+cf_standard_name=12:CF Standard Name:optional_cf_standard_name_description
+ensemble=13:Ensemble:optional_ensemble_description
+domain=14:Domain:optional_domain_description
+driving_model=15:Driving Model:optional_driving_model_description
+rcm_version=16:Downscaling realisation:optional_ds_description
+data_node=17:Data Node:optional_data_node_description
+\end{verbatimtab}
+
+\section{Publication Version}
+It was decided at the Trieste meet that all data published on IS-ENES2 datanodes will clearly specify the version number which is the date of the publication, expressed in the format \texttt{yyyymmdd}. This requires the creation of directory with that name, in the physical directory structure. This directory has to be created after the `Variable name' directory. Examples:\\
+\begin{tiny}
+\texttt{/datapool1/cordexdata/cordex/output/MNA-22/SMHI/ECMWF-ERAINT/evaluation/r0i0p0/SMHI-RCA4/v1/fx/orog/\yellowline{20131101}}\\
+\texttt{/datapool1/cordexdata/cordex/output/ARC-44/SMHI/NCC-NorESM1-M/historical/r0i0p0/SMHI-RCA4/v1/fx/sftlf/\yellowline{20140123}}\\
+\end{tiny}
+\\To get this version number correctly, the procedure is to append a \texttt{\myopt new-version $<$versionnum$>$} to the \texttt{esgpublish} command.
+
+\section{Directory Structure}
+The path to the directory tree containing the data shall have \texttt{Project/Product} followed by the directory tree containing the data. \\
+Given below are examples of valid and invalid directory structures.\\
+\vspace{0mm}\\
+\texttt{/cordex/output/...} \cmark\\
+\texttt{/localfs/localpath/cordex/output/...} \footnote{Some sites use the lower-case `cordex' while some use `CORDEX'; While there is no rule, the lower-case `cordex' may be considered as the prefered option.}\footnote{`output' is the value of the `Product' facet option here. It may take other values that are applicable to the `Product' facet in the future.} \cmark\\
+\texttt{/corddata/output/...} \xmark{ } //non-standard name corresponding to `Project'.  \\ 
+\texttt{/cordex/AFR-44/...} \xmark{ } //there is no directory corresponding to `Product'.
+
+\section{Variables to be excluded during publish: CORDEX}
+\begin{verbatimtab}[4]
+thredds_exclude_variables = a, a_bnds, alev1, alevel, alevhalf, alt40, b, \
+b_bnds, bnds, bounds_lat, bounds_lon, dbze, depth, depth0m, depth100m, \
+depth_bnds, geo_region, height, height10m, height2m, Lambert_Conformal, lat,\
+lat_bnds, lat_bounds, latitude, latitude_bnds, layer, lev, lev_bnds, location,\
+lon, lon_bnds, lon_bounds, longitude, longitude_bnds, olayer100m, olevel, oline,\
+p0, p220, p500, p560, p700, p840, plev, plev3, plev7, plev8, plev_bnds, plevs, \
+pressure1, region, rho, rlat, rotated_pole, rlon, scatratio, sdepth, sdepth1, \
+sza5, tau, tau_bnds, time, time1, time2, time_bnds, vegtype, x, y
+\end{verbatimtab}
+
+\section{Value for the `Model' facet}
+It was decided that the value of the `Model' facet should NOT contain the institute information, as this information is already captured and presented by the `Institute' facet.  However, the directory corresponding to the `Model' contains the name of the institute too, along with the model name, as stipulated by the CORDEX archive specifications \footnote{``RCMModelName is an alphanumeric identifier chosen by the modeling group; it should consist of an institute acronym and a model acronym, connected by a dash, e.g., DMI-HIRHAM5 or SMHI-RCA3.''\cite{cordexarchivespecs}}. This results in the requirement for some special handling.
+\mypar
+The easiest way to handle this is by planting a hard-coded correct value in the place of the substitution variable, in the \texttt{dataset\_id} line in the INI file. Example:
+\mypar
+\texttt{dataset\_id = cordex.\%(domain)s.\%(institute)s.\%(driving\_model)s.\%(experiment)s.\textbackslash\\
+\%(ensemble)s.\yellowline{RCA4}.\%(rcm\_version)s.\%(time\_frequency)s.\%(variable)s}
+\mypar
+\redline{This however could lead to a publication with a wrong value for the `Model' facet, if the correct value is not inserted prior to each publication.}
+\mypar
+Another way to fix this would be to rename all of the directories which correspond to the `Model' facet so that they don't have the institute name. If this is done, one can have a more conventional \texttt{dataset\_id} entry, like this:
+\mypar
+\texttt{dataset\_id = cordex.\%(domain)s.\%(institute)s.\%(driving\_model)s.\%(experiment)s.\textbackslash\\
+\%(ensemble)s.\%(rcm\_model)s.\%(rcm\_version)s.\%(time\_frequency)s.\%(variable)s}
+
+

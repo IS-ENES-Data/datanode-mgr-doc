@@ -1,0 +1,9 @@
+*.bbl
+*.blg
+*.log
+*.out
+*.xml
+*.toc
+*.aux
+datanodemgr-doc-blx.bib
+datanodemgr-doc.pdf
