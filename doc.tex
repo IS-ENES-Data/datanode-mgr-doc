@@ -59,25 +59,6 @@ Standard location: \texttt{/esg/config/esgf\_ats\_static.xml}
                description="Users of CMIP5 data for commercial purposes"
                registrationService="https://pcmdi9.llnl.gov/esgf-idp/secure/registrationService.htm"/>
 
-	<attribute type="CMIP5 Research"
-             attributeService="https://esgf-index1.ceda.ac.uk/esgf-idp/saml/soap/secure/attributeService.htm"
-             description="Users of CMIP5 data for non-commercial research purposes only"
-             registrationService="https://esgf-index1.ceda.ac.uk/esgf-idp/secure/registrationService.htm"/>
-   <attribute type="CMIP5 Commercial"
-             attributeService="https://esgf-index1.ceda.ac.uk/esgf-idp/saml/soap/secure/attributeService.htm"
-             description="Users of CMIP5 data for commercial purposes"
-             registrationService="https://esgf-index1.ceda.ac.uk/esgf-idp/secure/registrationService.htm"/>
-               
-    <!-- pcmdi7 Attribute Service: garantees that users that register with a gateway are immediately recognized by the p2p \
-	system -->
-	<!--
-    <attribute type="CMIP5 Research" attributeService="https://pcmdi7.llnl.gov/esgf-security/saml/soap/secure/\
-	attributeService.htm"
-               description="Users of CMIP5 data for non-commercial research purposes only" />
-    <attribute type="CMIP5 Commercial" attributeService="https://pcmdi7.llnl.gov/esgf-security/saml/soap/secure/\
-	attributeService.htm"
-               description="Users of CMIP5 data for commercial purposes" />           
-	-->
     <attribute type="CORDEX_Commercial" attributeService="https://esg-dn1.nsc.liu.se/esgf-idp/saml/soap/secure/\
 	attributeService.htm" description="User group for possible commercial users of CORDEX data" registrationService="\
 	https://esg-dn1.nsc.liu.se/esgf-idp/secure/registrationService.htm"/>
@@ -87,22 +68,16 @@ Standard location: \texttt{/esg/config/esgf\_ats\_static.xml}
 </ats_whitelist>
 \end{verbatimtab}
 \end{tiny}
-\newpage
+
 \section{ESGF IDP Whitelist settings}
 File name: \texttt{esgf\_idp\_static.xml}\\
 Standard location: \texttt{/esg/config/esgf\_idp\_static.xml}
 
-\begin{small}
+\begin{tiny}
 \begin{verbatimtab}[4]
-
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-
 <idp_whitelist xmlns="http://www.esgf.org/whitelist">
-
-	<value>https://pcmdi3.llnl.gov/esgcet/openid/provider.htm</value>
 	<value>https://cmip-gw.badc.rl.ac.uk/openid/openidserver</value>
-	<value>https://ndgbeta.badc.rl.ac.uk/openid/openidserver</value>
-	<value>https://ndg3beta.badc.rl.ac.uk/OpenID/Provider/server</value>
 	<value>https://ceda.ac.uk/OpenID/Provider/server</value>
 	<value>https://ceda.ac.uk/openid/Provider/server</value>
 	<value>https://ipcc-ar5.dkrz.de/openid/provider.htm</value>
@@ -125,13 +100,12 @@ Standard location: \texttt{/esg/config/esgf\_idp\_static.xml}
     <value>https://noresg.norstore.uio.no/esgf-idp/idp/openidServer.htm</value>
 	<value>https://esg.bnu.edu.cn/esgf-idp/idp/openidServer.htm</value>
 	<value>https://cordexesg.dmi.dk/esgf-idp/idp/openidServer.htm</value>
-
 </idp_whitelist>
 \end{verbatimtab}
-\end{small}
+\end{tiny}
 
 \section{Publication Version}
-It was decided at the Trieste meet that all data published on IS-ENES2 datanodes will clearly specify the version number which is the date of the publication, expressed in the format \texttt{v}\textit{yyyymmdd}. This requires the creation of directory with that name, in the physical directory structure. This directory has to be created after the `Variable name' directory. Examples:\\
+It was decided at the Trieste meet that all data published on IS-ENES2 datanodes will clearly specify the version number which is the date of the publication, expressed in the format \texttt{yyyymmdd}. This requires the creation of directory with that name, in the physical directory structure. This directory has to be created after the `Variable name' directory. Examples:\\
 \begin{tiny}
 \texttt{/datapool1/cordexdata/cordex/output/MNA-22/SMHI/ECMWF-ERAINT/evaluation/r0i0p0/SMHI-RCA4/v1/fx/orog/\yellowline{20131101}}\\
 \texttt{/datapool1/cordexdata/cordex/output/ARC-44/SMHI/NCC-NorESM1-M/historical/r0i0p0/SMHI-RCA4/v1/fx/sftlf/\yellowline{20140123}}\\
@@ -143,13 +117,13 @@ The path to the directory tree containing the data shall have \texttt{Project/Pr
 Given below are examples of valid and invalid directory structures.\\
 \vspace{0mm}\\
 \texttt{/cordex/output/...} \cmark\\
-\texttt{/localfs/localpath/cordex/output/...} \footnote{Some sites use the lower-case `cordex' while some use `CORDEX'; While there is no rule, the lower-case `cordex' may be considered as the prefered option.}\footnote{`output' is the value of the `Product' facet option here. It may take other values that are applicable to the `Product' facet in the future.} \cmark\\
+\texttt{/localfs/localpath/cordex/output/...} \cmark \footnote{Some sites use the lower-case `cordex' while some use `CORDEX'; While there is no rule, the lower-case `cordex' may be considered as the prefered option.}\footnote{`output' is the value of the `Product' facet option here. It may take other values that are applicable to the `Product' facet in the future.} \\
 \texttt{/corddata/output/...} \xmark{ } //non-standard name corresponding to `Project'.  \\ 
 \texttt{/cordex/AFR-44/...} \xmark{ } //there is no directory corresponding to `Product'.
 
 \section{Variables to be excluded during publish: CORDEX}
 
-The following declaration inside \texttt{/esg/esgcet/esg.ini} should be used to exclude certain variables from the THREDDS catalogues generated by \texttt{esgpublish}.  Note that this differs from the default value created by previous versions of \texttt{esgsetup}; in particular managers should ensure that the variable \texttt{basin} is not excluded.
+The following declaration inside \texttt{/esg/esgcet/esg.ini} should be used to exclude certain variables from the THREDDS catalogues generated by \texttt{esgpublish}.  Note that this differs from the default value created by previous versions of \texttt{esgsetup}; \yellowline{in particular managers should ensure that the variable \texttt{basin} is NOT excluded.}
 
 \begin{verbatimtab}[4]
 thredds_exclude_variables = a, a_bnds, alev1, alevel, alevhalf, alt40, b, \
@@ -165,16 +139,25 @@ sza5, tau, tau_bnds, time, time1, time2, time_bnds, vegtype, x, y
 \section{Value for the `Model' facet}
 It was decided that the value of the `Model' facet should NOT contain the institute information, as this information is already captured and presented by the `Institute' facet.  However, the directory corresponding to the `Model' contains the name of the institute too, along with the model name, as stipulated by the CORDEX archive specifications \footnote{``RCMModelName is an alphanumeric identifier chosen by the modeling group; it should consist of an institute acronym and a model acronym, connected by a dash, e.g., DMI-HIRHAM5 or SMHI-RCA3.''\cite{cordexarchivespecs}}. This results in the requirement for some special handling.
 \mypar
-The easiest way to handle this is by planting a hard-coded correct value in the place of the substitution variable, in the \texttt{dataset\_id} line in the INI file. Example:
-\mypar
-\texttt{dataset\_id = cordex.\%(product)s.\%(domain)s.\%(institute)s.\%(driving\_model)s.\textbackslash\\
-\%(experiment)s.\%(ensemble)s.\yellowline{RCA4}.\%(rcm\_version)s.\%(time\_frequency)s.\%(variable)s}
-\mypar
-\redline{This however could lead to a publication with a wrong value for the `Model' facet, if the correct value is not inserted prior to each publication.}
-\mypar
-Another way to fix this would be to rename all of the directories which correspond to the `Model' facet so that they don't have the institute name. If this is done, one can have a more conventional \texttt{dataset\_id} entry, like this:
-\mypar
-\begin{small}
-\texttt{dataset\_id = cordex.\%(product)s.\%(domain)s.\%(institute)s.\%(driving\_model)s.\textbackslash\\
-\%(experiment)s.\%(ensemble)s.\%(rcm\_model)s.\%(rcm\_version)s.\%(time\_frequency)s.\%(variable)s}
-\end{small}
+The easiest way to handle this is by creating a substitution map for the variable.
+\begin{enumerate}
+\item Under the options for \texttt{[project:cordex]}, find the configuration line that says \texttt{maps}
+\item Edit the line to say the following:\\
+\texttt{maps = model\_map,institute\_map, las\_time\_delta\_map, domain\_map}
+\item Create a new map `model\_map' and populate it with entries that correspond to  the models that you handle, leaving out the institute part in the last field.
+\item Look at the example below for reference:
+\begin{verbatimtab}[4]
+model_map = map(project,rcm_model : model)
+    cordex |SMHI-RCA4| RCA4
+    cordex |SMHI-RCA4-SN| RCA4-SN
+\end{verbatimtab}
+\item Use the regex `model' in the place of the directory corresponding to the model directory, in the \texttt{dataset\_id} string.
+\vspace{-6mm}\\
+\begin{verbatimtab}[4]
+dataset_id = cordex.%(product)s.%(domain)s.%(institute)s.%(driving_model)s.\
+%(experiment)s.%(ensemble)s.%(model)s.%(rcm_version)s.%(time_frequency)s.\
+%(variable)s
+\end{verbatimtab}
+\end{enumerate}
+\section{Acknowledgments}
+Many people have contributed to this document, pointing out errors and suggesting improvements. Thanks in particular to Katharina Berger and Stephanie Legutke of the DKRZ and Stephen Pascoe of the BADC for their suggestions.  Together, we hope to make the task of datanode administration a bit less of a hopeless task, with this reference manual!
