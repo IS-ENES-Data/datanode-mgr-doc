@@ -131,10 +131,10 @@ Standard location: \texttt{/esg/config/esgf\_idp\_static.xml}
 \end{small}
 
 \section{Publication Version}
-It was decided at the Trieste meet that all data published on IS-ENES2 datanodes will clearly specify the version number which is the date of the publication, expressed in the format \texttt{yyyymmdd}. This requires the creation of directory with that name, in the physical directory structure. This directory has to be created after the `Variable name' directory. Examples:\\
+It was decided at the Trieste meet that all data published on IS-ENES2 datanodes will clearly specify the version number which is the date of the publication, expressed in the format \texttt{v}\textit{yyyymmdd}. This requires the creation of directory with that name, in the physical directory structure. This directory has to be created after the `Variable name' directory. Examples:\\
 \begin{tiny}
-\texttt{/datapool1/cordexdata/cordex/output/MNA-22/SMHI/ECMWF-ERAINT/evaluation/r0i0p0/SMHI-RCA4/v1/fx/orog/\yellowline{20131101}}\\
-\texttt{/datapool1/cordexdata/cordex/output/ARC-44/SMHI/NCC-NorESM1-M/historical/r0i0p0/SMHI-RCA4/v1/fx/sftlf/\yellowline{20140123}}\\
+\texttt{/datapool1/cordexdata/cordex/output/MNA-22/SMHI/ECMWF-ERAINT/evaluation/r0i0p0/SMHI-RCA4/v1/fx/orog/\yellowline{v20131101}}\\
+\texttt{/datapool1/cordexdata/cordex/output/ARC-44/SMHI/NCC-NorESM1-M/historical/r0i0p0/SMHI-RCA4/v1/fx/sftlf/\yellowline{v20140123}}\\
 \end{tiny}
 \\To get this version number correctly, the procedure is to append a \texttt{\myopt new-version $<$versionnum$>$} to the \texttt{esgpublish} command.
 
