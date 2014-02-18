@@ -159,5 +159,59 @@ dataset_id = cordex.%(product)s.%(domain)s.%(institute)s.%(driving_model)s.\
 %(variable)s
 \end{verbatimtab}
 \end{enumerate}
+\subsection{Complete \texttt{model\_map}}
+The current and comprehensive list of CORDEX models may be obtained from:\\
+\url{http://cordex.dmi.dk/joomla/images/CORDEX/RCMModelName.txt}. \\
+Given below is a script that can generate a complete \texttt{model\_map} table, that could then be pasted into the ini file. Also present is the output of the script.
+\begin{tiny}
+\begin{verbatimtab}[4]
+#!/bin/bash
+
+curl -s 'http://cordex.dmi.dk/joomla/images/CORDEX/RCMModelName.txt'|grep -v '#'|grep 'confirmed'|tr -s ' ' >modelnames.txt
+nl=`cat modelnames.txt|wc -l`;
+echo "model_map = map(project,rcm_model : model)" >modelmap.txt
+for (( i=1; i<=nl; i++ )); do
+        ln=`cat modelnames.txt|head -$i|tail -1`;
+        inst=`echo $ln|cut -d' ' -f2`;
+        res=`echo $ln| sed "s/$inst-\(.*\) \(.*\) confirmed/\tcordex| $inst-\1| \1/"`
+        echo -e "$res" >>modelmap.txt;
+done
+
+model_map = map(project,rcm_model : model)
+        cordex| AUTH-LHTEE-WRF321B| WRF321B
+        cordex| AUTH-Met-WRF331A| WRF331A
+        cordex| AWI-HIRHAM5| HIRHAM5
+        cordex| CCCma-CanRCM4| CanRCM4
+        cordex| CHMI-ALADIN52| ALADIN52
+        cordex| CLMcom-CCLM4-8-17| CCLM4-8-17
+        cordex| CNRM-ALADIN52| ALADIN52
+        cordex| CNRM-ARPEGE52| ARPEGE52
+        cordex| CRP-GL-WRF331A| WRF331A
+        cordex| CUNI-RegCM4-2| RegCM4-2
+        cordex| DHMZ-RegCM4-2| RegCM4-2
+        cordex| DMI-HIRHAM5| HIRHAM5
+        cordex| ENEA-RegCM4-3| RegCM4-3
+        cordex| HMS-ALADIN52| ALADIN52
+        cordex| ICTP-RegCM4-3| RegCM4-3
+        cordex| IDL-WRF331D| WRF331D
+        cordex| IPSL-INERIS-WRF331F| WRF331F
+        cordex| KNMI-RACMO21P| RACMO21P
+        cordex| KNMI-RACMO22T| RACMO22T
+        cordex| MIUB-WRF331A| WRF331A
+        cordex| MOHC-HadGEM3-RA| HadGEM3-RA
+        cordex| MOHC-HadRM3P| HadRM3P
+        cordex| MPI-CSC-REMO2009| REMO2009
+        cordex| NUIM-WRF331F| WRF331F
+        cordex| SMHI-RCA4| RCA4
+        cordex| SMHI-RCA4-SN| RCA4-SN
+        cordex| SMHI-RCAO| RCAO
+        cordex| SMHI-RCAO-SN| RCAO-SN
+        cordex| UCAN-WRF331G| WRF331G
+        cordex| UCAN-WRF350I| WRF350I
+        cordex| UCLM-PROMES| PROMES
+        cordex| UHOH-WRF331H| WRF331H
+        cordex| UQAM-CRCM5| CRCM5
+\end{verbatimtab}
+\end{tiny}
 \section{Acknowledgments}
 Many people have contributed to this document, pointing out errors and suggesting improvements. Thanks in particular to Katharina Berger and Stephanie Legutke of the DKRZ and Stephen Pascoe of the BADC for their suggestions.  Together, we hope to make the task of datanode administration a bit less of a hopeless task, with this reference manual!
