@@ -105,10 +105,10 @@ Standard location: \texttt{/esg/config/esgf\_idp\_static.xml}
 \end{tiny}
 
 \section{Publication Version}
-It was decided at the Trieste meet that all data published on IS-ENES2 datanodes will clearly specify the version number which is the date of the publication, expressed in the format \texttt{yyyymmdd}. This requires the creation of directory with that name, in the physical directory structure. This directory has to be created after the `Variable name' directory. Examples:\\
+It was decided at the Trieste meet that all data published on IS-ENES2 datanodes will clearly specify the version number which is the date of the publication, expressed in the format \textbf{v}\textit{yyyymmdd}. This requires the creation of directory with that name, in the physical directory structure. This directory has to be created after the `Variable name' directory. Examples:\\
 \begin{tiny}
-\texttt{/datapool1/cordexdata/cordex/output/MNA-22/SMHI/ECMWF-ERAINT/evaluation/r0i0p0/SMHI-RCA4/v1/fx/orog/\yellowline{20131101}}\\
-\texttt{/datapool1/cordexdata/cordex/output/ARC-44/SMHI/NCC-NorESM1-M/historical/r0i0p0/SMHI-RCA4/v1/fx/sftlf/\yellowline{20140123}}\\
+\texttt{/datapool1/cordexdata/cordex/output/MNA-22/SMHI/ECMWF-ERAINT/evaluation/r0i0p0/SMHI-RCA4/v1/fx/orog/\yellowline{v20131101}}\\
+\texttt{/datapool1/cordexdata/cordex/output/ARC-44/SMHI/NCC-NorESM1-M/historical/r0i0p0/SMHI-RCA4/v1/fx/sftlf/\yellowline{v20140123}}\\
 \end{tiny}
 \\To get this version number correctly, the procedure is to append a \texttt{\myopt new-version $<$versionnum$>$} to the \texttt{esgpublish} command.
 
@@ -119,7 +119,12 @@ Given below are examples of valid and invalid directory structures.\\
 \texttt{/cordex/output/...} \cmark\\
 \texttt{/localfs/localpath/cordex/output/...} \cmark \footnote{Some sites use the lower-case `cordex' while some use `CORDEX'; While there is no rule, the lower-case `cordex' may be considered as the prefered option.}\footnote{`output' is the value of the `Product' facet option here. It may take other values that are applicable to the `Product' facet in the future.} \\
 \texttt{/corddata/output/...} \xmark{ } //non-standard name corresponding to `Project'.  \\ 
-\texttt{/cordex/AFR-44/...} \xmark{ } //there is no directory corresponding to `Product'.
+\texttt{/cordex/AFR-44/...} \xmark{ } //there is no directory corresponding to `Product'. Here is a complete \texttt{directory\_format} line, for reference:
+\begin{verbatim}
+directory_format = /localpath/cordex/%(product)s/%(domain)s/%(institute)s/\
+%(driving_model)s/%(experiment)s/%(ensemble)s/%(rcm_model)s/%(rcm_version)s/\
+%(time_frequency)s/%(variable)s/v%(version)s
+\end{verbatim}
 
 \section{Variables to be excluded during publish: CORDEX}
 
@@ -213,5 +218,37 @@ model_map = map(project,rcm_model : model)
         cordex| UQAM-CRCM5| CRCM5
 \end{verbatimtab}
 \end{tiny}
+
+\section{\texttt{esgcet\_models\_table.txt}}
+Apart from the model map, another map that lists models and their parent organizations is the \texttt{/esg/config/esgcet\_models\_table.txt}. After making any changes to it, one needs to execute \texttt{esginitialize -c}, to update it, and if that doesn't work, you may need to `downgrade' the database by excuting \texttt{esginitialize \myopt d0} and then executing \texttt{esginitialize -c}.
+\begin{tiny}
+\begin{verbatim}
+  test | test | http://www-pcmdi.llnl.gov | Test
+  test | ncar_ccsm3_0 | http://www.ccsm.ucar.edu| NCAR Community Climate System Model, CCSM 3.0
+  cordex | RCA4 | SMHI | www.smhi.se
+  cordex | RCA4-SN | SMHI | www.smhi.se
+  cordex | RCAO | SMHI | www.smhi.se
+  cordex | RCAO-SN | SMHI | www.smhi.se
+\end{verbatim}
+\end{tiny}
+
+\section{Displaying the project name in upper case}
+Though the project name is always expressed in lower case in catalogs and metadata, it is displayed in the upper-case in the web frontend. This requires setting a simple substitution string. Simply add the name of the project, first in lower case and then in upper case, separated by a colon. The file into which this string goes in is:
+\vspace{-4mm}
+\begin{small}
+\begin{verbatim}
+/usr/local/tomcat/webapps/esg-search/WEB-INF/classes/esg/search/config/projects.properties
+cmip5:CMIP5
+obs4mips:obs4MIPs
+cssef:CSSEF
+tamip:TAMIP
+lucid:LUCID
+test:TEST
+pmip3:PMIP3
+geomip:GeoMIP
+euclipse:EUCLIPSE
+cordex:CORDEX
+\end{verbatim}
+\end{small}
 \section{Acknowledgments}
 Many people have contributed to this document, pointing out errors and suggesting improvements. Thanks in particular to Katharina Berger and Stephanie Legutke of the DKRZ and Stephen Pascoe of the BADC for their suggestions.  Together, we hope to make the task of datanode administration a bit less of a hopeless task, with this reference manual!
