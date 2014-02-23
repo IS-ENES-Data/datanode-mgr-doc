@@ -1,0 +1,4 @@
+$tomcatdir/webapps/esg-orp/WEB-INF/views/jsp/registration-request.jsp
+$tomcatdir/webapps/esg-orp/licenses/CordexResearchLicense.xml
+$tomcatdir/webapps/esg-orp/licenses/CordexCommercialLicense.xml
+

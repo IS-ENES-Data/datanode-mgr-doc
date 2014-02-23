@@ -2,9 +2,9 @@
 *.blg
 *.log
 *.out
-*.xml
 *.toc
 *.aux
 extpush.sh
 datanodemgr-doc-blx.bib
+datanodemgr-doc.run.xml
 datanodemgr-doc.pdf

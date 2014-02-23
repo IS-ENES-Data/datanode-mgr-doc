@@ -37,8 +37,7 @@ data_node=17:Data Node:optional_data_node_description
 \end{small}
 \section{ESGF Attribute Services}
 \label{attribservicesfile}
-File name: \texttt{esgf\_ats\_static.xml}\\
-Standard location: \texttt{/esg/config/esgf\_ats\_static.xml}\\
+File name: \texttt{/esg/config/esgf\_ats\_static.xml}\\
 For information about how to setup your datanode to correctly enforce restrictions on CORDEX data usage, refer to Section~\ref{enforcegrouprestrictions}.
 
 \begin{tiny}
@@ -72,14 +71,17 @@ For information about how to setup your datanode to correctly enforce restrictio
 \end{tiny}
 
 \section{ESGF IDP Whitelist settings}
-File name: \texttt{esgf\_idp\_static.xml}\\
-Standard location: \texttt{/esg/config/esgf\_idp\_static.xml}
-
+File name: \texttt{/esg/config/esgf\_idp\_static.xml}
 \begin{tiny}
 \begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
 <idp_whitelist xmlns="http://www.esgf.org/whitelist">
+
+	<value>https://pcmdi3.llnl.gov/esgcet/openid/provider.htm</value>
 	<value>https://cmip-gw.badc.rl.ac.uk/openid/openidserver</value>
+	<value>https://ndgbeta.badc.rl.ac.uk/openid/openidserver</value>
+	<value>https://ndg3beta.badc.rl.ac.uk/OpenID/Provider/server</value>
 	<value>https://ceda.ac.uk/OpenID/Provider/server</value>
 	<value>https://ceda.ac.uk/openid/Provider/server</value>
 	<value>https://ipcc-ar5.dkrz.de/openid/provider.htm</value>
@@ -91,18 +93,58 @@ Standard location: \texttt{/esg/config/esgf\_idp\_static.xml}
 	<value>https://esg.nersc.gov/esgcet/openid/provider.htm</value>
 	<value>https://esg2-gw.ccs.ornl.gov/esgcet/openid/provider.htm</value>
 	<value>https://esg-gw.ornl.teragrid.org/openid/provider.htm</value>
-    <value>https://hydra.fsl.noaa.gov/esgf-idp/idp/openidServer.htm</value>
-    <value>https://dev-hydra.esrl.svc/esgf-idp/idp/openidServer.htm</value>
-    <value>https://pcmdi9.llnl.gov/esgf-idp/idp/openidServer.htm</value>
-    <value>https://pcmdi11.llnl.gov/esgf-idp/idp/openidServer.htm</value>
-    <value>https://esg-dn1.nsc.liu.se/esgf-idp/idp/openidServer.htm</value>
-    <value>https://esg-datanode.jpl.nasa.gov/esgf-idp/idp/openidServer.htm</value>
-    <value>https://esgf-data.dkrz.de/esgf-idp/idp/openidServer.htm</value>
-    <value>https://esgf-node.ipsl.fr/esgf-idp/idp/openidServer.htm</value>
-    <value>https://noresg.norstore.uio.no/esgf-idp/idp/openidServer.htm</value>
+	<value>https://hydra.fsl.noaa.gov/esgf-idp/idp/openidServer.htm</value>
+	<value>https://dev-hydra.esrl.svc/esgf-idp/idp/openidServer.htm</value>
+	<value>https://pcmdi9.llnl.gov/esgf-idp/idp/openidServer.htm</value>
+	<value>https://esg-test.nsc.liu.se/esgf-idp/idp/openidServer.htm</value>
+	<value>https://esg-dn1.nsc.liu.se/esgf-idp/idp/openidServer.htm</value>
+	<value>https://esg-dn2.nsc.liu.se/esgf-idp/idp/openidServer.htm</value>
+	<value>https://esg-datanode.jpl.nasa.gov/esgf-idp/idp/openidServer.htm</value>
+	<value>https://test-datanode.jpl.nasa.gov/esgf-idp/idp/openidServer.htm</value>
+	<value>https://esgf-data.dkrz.de/esgf-idp/idp/openidServer.htm</value>
+	<value>https://esgf-node.ipsl.fr/esgf-idp/idp/openidServer.htm</value>
+	<value>https://noresg.norstore.uio.no/esgf-idp/idp/openidServer.htm</value>
 	<value>https://esg.bnu.edu.cn/esgf-idp/idp/openidServer.htm</value>
 	<value>https://cordexesg.dmi.dk/esgf-idp/idp/openidServer.htm</value>
+	<value>https://dev.esg.anl.gov/esgf-idp/idp/openidServer.htm</value>
+
 </idp_whitelist>
+\end{verbatimtab}
+\end{tiny}
+\section{ESGF Search Shard configuration settings}
+File name: \texttt{/esg/config/esgf\_shards\_static.xml}
+
+\begin{tiny}
+\begin{verbatimtab}[4]
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<shards xmlns="http://www.esgf.org/whitelist">
+    <value>localhost:8983/solr</value>
+    <!-- US -->
+    <value>pcmdi9.llnl.gov:8983/solr</value>
+    <value>pcmdi11.llnl.gov:8983/solr</value>
+    <value>esg-datanode.jpl.nasa.gov:8983/solr</value>
+    <value>esg.ccs.ornl.gov:8983/solr</value>
+    <value>esgf.nccs.nasa.gov:8983/solr</value>
+    <value>esg01.nersc.gov:8983/solr</value>
+    <value>esgdata.gfdl.noaa.gov:8983/solr</value>
+    <value>hydra.fsl.noaa.gov:8983/solr</value>
+    
+    <!-- Europe -->
+    <value>esgf-index1.ceda.ac.uk:8983/solr</value>
+    <value>esgf-data.dkrz.de:8983/solr</value>
+    <value>adm07.cmcc.it:8983/solr</value>
+    <value>esgf-node.ipsl.fr:8983/solr</value>
+    <value>noresg.norstore.uio.no:8983/solr</value>
+    <value>cordexesg.dmi.dk:8983/solr</value>
+    <value>esg.pik-potsdam.de:8983/solr</value>
+  
+    <!-- Australia -->
+    <value>esg2.nci.org.au:8983/solr</value>
+ 
+    <!-- Asia -->
+   <value>esg.bnu.edu.cn:8983/solr</value>
+</shards>
+
 \end{verbatimtab}
 \end{tiny}
 
@@ -256,7 +298,21 @@ cordex:CORDEX
 \section{Enforcing group restrictions on CORDEX data}
 \label{enforcegrouprestrictions}
 CORDEX data published on the ESGF datanodes in the federation are made available only to those who apply for membership to one of the two groups associated with CORDEX data. These groups, apart from restricting who can access these datasets can also serve as a mechanism to specify additional terms of data access.  The \texttt{CORDEX\_RESEARCH} group is for individuals who wish to download and use the data only for non-commercial purposes whereas \texttt{CORDEX\_COMMERCIAL} is for those individuals who may wish to use the data for commercial purposes. CORDEX data which is open for unrestricted use is made available to both groups whereas data which is meant to be only used for non-commercial use is only made accessible to members of the \texttt{CORDEX\_RESEARCH} group. \greenline{Unless otherwise specified by the data-provider, all CORDEX datasets should be accessible by members of both \texttt{CORDEX\_RESEARCH} and \texttt{CORDEX\_COMMERCIAL} groups.} Attribute management for these CORDEX groups is managed on the \texttt{esg-dn1.nsc.liu.se} datanode and for configuring your datanode to use this attribute service, refer to Section~\ref{attribservicesfile}.
+\subsection{Ensure presence of license files}
+If you are running the latest version of the middleware (1.6.x), you may skip to Section~\ref{segregatedata}. If you are running an older release, check whether the following files are present, on your datanode:
+\begin{enumerate}
+\item \$tomcatdir/webapps/esg-orp/licenses/CordexResearchLicense.xml
+\item \$tomcatdir/webapps/esg-orp/licenses/CordexCommercialLicense.xml
+\end{enumerate}
+If the above listed files are NOT present:
+\begin{enumerate}
+\item git clone the repository containing this document, along with the license files from \url{https://github.com/snic-nsc/datanode-mgr-doc.git} 
+\item Copy the license files present in the \texttt{cordexlicensefiles} directory over to their respective target locations on the datanode(specified in file `filelocations', also in the same directory). 
+\item Ensure that you replace the default `registration-request.jsp' file with the one present in the \texttt{cordexlicensefiles} directory, as this file activates the usage of the CORDEX license files.
+\item Restart \texttt{esg-node}
+\end{enumerate}
 \subsection{Segregating data}
+\label{segregatedata}
 The ESGF attribute service can be used to restrict access to data by creating different policies for different file paths. This means that data with different levels of access restrictions ought to be in distinct directory heirarchies. This needs some conscious planning by datanode managers, preferably prior to data publication, as it may be inconvenient to move data directories later. Planning is required to setup unambigious and intuitive directory trees which will then have different restriction policies applied on them. For the purpose of reducing publication time confusions and or possibility of errors, it is strongly recommended to set up entirely seperate directory trees, rather than having a mix of the two types under the same tree, that is, under distinct  \texttt{thredds\_dataset\_roots}.
 \subsection{Caveat}
 Unlike most commercial scenarios where a paying or `commercial' customer gets additional features/privileges, in the CORDEX sense, a commercial user is one who has fewer datasets he/she can possibly access; This is because datasets which are meant for non-commercial access would not be available for these users.  What this means is that \yellowline{naming a top-level directory/dataset\_root as \texttt{Commercial} or similar, would be counter-intuitive as it would be available for all users.}  It is however beneficial to create a directory/dataset\_root called \texttt{Non-Commercial}, as this would clearly indicate that it's only for non-commercial use, that is, it's only available for users belonging to the \texttt{CORDEX\_RESEARCH} group. 
