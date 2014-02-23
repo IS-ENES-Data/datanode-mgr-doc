@@ -36,8 +36,10 @@ data_node=17:Data Node:optional_data_node_description
 \end{verbatimtab}
 \end{small}
 \section{ESGF Attribute Services}
+\label{attribservicesfile}
 File name: \texttt{esgf\_ats\_static.xml}\\
-Standard location: \texttt{/esg/config/esgf\_ats\_static.xml}
+Standard location: \texttt{/esg/config/esgf\_ats\_static.xml}\\
+For information about how to setup your datanode to correctly enforce restrictions on CORDEX data usage, refer to Section~\ref{enforcegrouprestrictions}.
 
 \begin{tiny}
 \begin{verbatimtab}[4]
@@ -107,8 +109,8 @@ Standard location: \texttt{/esg/config/esgf\_idp\_static.xml}
 \section{Publication Version}
 It was decided at the Trieste meet that all data published on IS-ENES2 datanodes will clearly specify the version number which is the date of the publication, expressed in the format \textbf{v}\textit{yyyymmdd}. This requires the creation of directory with that name, in the physical directory structure. This directory has to be created after the `Variable name' directory. Examples:\\
 \begin{tiny}
-\texttt{/datapool1/cordexdata/cordex/output/MNA-22/SMHI/ECMWF-ERAINT/evaluation/r0i0p0/SMHI-RCA4/v1/fx/orog/\yellowline{v20131101}}\\
-\texttt{/datapool1/cordexdata/cordex/output/ARC-44/SMHI/NCC-NorESM1-M/historical/r0i0p0/SMHI-RCA4/v1/fx/sftlf/\yellowline{v20140123}}\\
+\texttt{/datapool1/cordexgeneral/cordex/output/MNA-22/SMHI/ECMWF-ERAINT/evaluation/r0i0p0/SMHI-RCA4/v1/fx/orog/\yellowline{v20131101}}\\
+\texttt{/datapool1/cordexgeneral/cordex/output/ARC-44/SMHI/NCC-NorESM1-M/historical/r0i0p0/SMHI-RCA4/v1/fx/sftlf/\yellowline{v20140123}}\\
 \end{tiny}
 \\To get this version number correctly, the procedure is to append a \texttt{\myopt new-version $<$versionnum$>$} to the \texttt{esgpublish} command.
 
@@ -250,5 +252,44 @@ euclipse:EUCLIPSE
 cordex:CORDEX
 \end{verbatim}
 \end{small}
+
+\section{Enforcing group restrictions on CORDEX data}
+\label{enforcegrouprestrictions}
+CORDEX data published on the ESGF datanodes in the federation are made available only to those who apply for membership to one of the two groups associated with CORDEX data. These groups, apart from restricting who can access these datasets can also serve as a mechanism to specify additional terms of data access.  The \texttt{CORDEX\_RESEARCH} group is for individuals who wish to download and use the data only for non-commercial purposes whereas \texttt{CORDEX\_COMMERCIAL} is for those individuals who may wish to use the data for commercial purposes. CORDEX data which is open for unrestricted use is made available to both groups whereas data which is meant to be only used for non-commercial use is only made accessible to members of the \texttt{CORDEX\_RESEARCH} group. \greenline{Unless otherwise specified by the data-provider, all CORDEX datasets should be accessible by members of both \texttt{CORDEX\_RESEARCH} and \texttt{CORDEX\_COMMERCIAL} groups.} Attribute management for these CORDEX groups is managed on the \texttt{esg-dn1.nsc.liu.se} datanode and for configuring your datanode to use this attribute service, refer to Section~\ref{attribservicesfile}.
+\subsection{Segregating data}
+The ESGF attribute service can be used to restrict access to data by creating different policies for different file paths. This means that data with different levels of access restrictions ought to be in distinct directory heirarchies. This needs some conscious planning by datanode managers, preferably prior to data publication, as it may be inconvenient to move data directories later. Planning is required to setup unambigious and intuitive directory trees which will then have different restriction policies applied on them. For the purpose of reducing publication time confusions and or possibility of errors, it is strongly recommended to set up entirely seperate directory trees, rather than having a mix of the two types under the same tree, that is, under distinct  \texttt{thredds\_dataset\_roots}.
+\subsection{Caveat}
+Unlike most commercial scenarios where a paying or `commercial' customer gets additional features/privileges, in the CORDEX sense, a commercial user is one who has fewer datasets he/she can possibly access; This is because datasets which are meant for non-commercial access would not be available for these users.  What this means is that \yellowline{naming a top-level directory/dataset\_root as \texttt{Commercial} or similar, would be counter-intuitive as it would be available for all users.}  It is however beneficial to create a directory/dataset\_root called \texttt{Non-Commercial}, as this would clearly indicate that it's only for non-commercial use, that is, it's only available for users belonging to the \texttt{CORDEX\_RESEARCH} group. 
+\subsection{Paths and regexes}
+The ESGF attribute service sees paths as presented to it by thredds. You can use that to design the regex that you need. \yellowline{Ensure that you don't design a regex which gets triggered by unintended elements in the path, including the hostname of the node itself!} While configuring the attribute service on the DMI datanode, the hostname of the node, \texttt{cordexesg.dmi.dk} was triggering the regex match for the expression \texttt{.*cordex.*} causing every url to match!!
+\subsection{Setting up the \texttt{esgf\_policies\_local.xml}}
+Let's consider the following configuration lines:
+\begin{tiny}
+\begin{verbatimtab}[4]
+<policy resource=".*fileServer.*cordexnoncommercial.*" attribute_type="CORDEX_Research" attribute_value="user" action="Read"/>
+<policy resource=".*fileServer.*cordexgeneral.*" attribute_type="CORDEX_Research" attribute_value="user" action="Read"/>
+<policy resource=".*fileServer.*cordexgeneral.*" attribute_type="CORDEX_Commercial" attribute_value="user" action="Read"/>
+<policy resource=".*fileServer.*cord.*" attribute_type="wheel" attribute_value="super" action="Write"/>
+\end{verbatimtab}
+\end{tiny}
+These lines indicate that thredds urls containing the element \texttt{cordexnoncommercial} are only accessible to members of \texttt{CORDEX\_RESEARCH} group whereas urls containing \texttt{cordexgeneral} are accessible by all CORDEX data users. We can also see that \texttt{Write} or \texttt{Publish} access is only provided to users of group \texttt{wheel} with attribute \texttt{super}. This would allow the special user account \texttt{rootAdmin} to be used for all publication activities.
+\subsection{Corresponding \texttt{thredds\_dataset\_roots} entries}
+The \texttt{thredds\_dataset\_roots} entries can be set up in many ways.  Let's consider two cases.
+\begin{enumerate}
+\item Both non-commercial and general data being under the same dataset\_root:
+\begin{verbatim}
+thredds_dataset_roots =
+	esg_dataroot1| /data
+\end{verbatim}
+Here, the non-commercial data would be placed under \texttt{/data/cordexnoncommercial} whereas the general data would be under \texttt{/data/cordexgeneral}.
+\item Non-commercial and general data being under different dataset\_roots:
+\begin{verbatim}
+thredds_dataset_roots =
+	esg_cordexnoncommercial| /dir1/cordex
+	esg_cordexgeneral| /dir2/cordex
+\end{verbatim}
+\end{enumerate}
+\redline{Caution!!} The part of the path specified as the \texttt{thredds\_dataset\_root} would be subsituted by the name associated with the dataset\_root in the thredds filename. This means that if your \texttt{thredds\_dataset\_root} value reads thus: \texttt{esg\_data| /partion1/noncommercial}, the `\texttt{partition1/noncommercial}' part of the path will be substituted by \texttt{esg\_data} in the thredds url and hence would not match the regex you'd planned to capture `noncommercial'.  It is therefore preferred to simply use the name of the \texttt{thredds\_dataset\_root} as the regex match.
+%http://carbon.dkrz.de/thredds/fileServer/cordex/output/EUR-11/KNMI/ECMWF-ERAINT/evaluation/r1i1p1/KNMI-RACMO22E/v1/day/clh/v20140218/clh_EUR-11_ECMWF-ERAINT_evaluation_r1i1p1_KNMI-RACMO22E_v1_day_20110101-20121231.nc?
 \section{Acknowledgments}
 Many people have contributed to this document, pointing out errors and suggesting improvements. Thanks in particular to Katharina Berger and Stephanie Legutke of the DKRZ and Stephen Pascoe of the BADC for their suggestions.  Together, we hope to make the task of datanode administration a bit less of a hopeless task, with this reference manual!
