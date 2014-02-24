@@ -346,6 +346,24 @@ thredds_dataset_roots =
 \end{verbatim}
 \end{enumerate}
 \redline{Caution!!} The part of the path specified as the \texttt{thredds\_dataset\_root} would be subsituted by the name associated with the dataset\_root in the thredds filename. This means that if your \texttt{thredds\_dataset\_root} value reads thus: \texttt{esg\_data| /partion1/noncommercial}, the `\texttt{partition1/noncommercial}' part of the path will be substituted by \texttt{esg\_data} in the thredds url and hence would not match the regex you'd planned to capture `noncommercial'.  It is therefore preferred to simply use the name of the \texttt{thredds\_dataset\_root} as the regex match.
-%http://carbon.dkrz.de/thredds/fileServer/cordex/output/EUR-11/KNMI/ECMWF-ERAINT/evaluation/r1i1p1/KNMI-RACMO22E/v1/day/clh/v20140218/clh_EUR-11_ECMWF-ERAINT_evaluation_r1i1p1_KNMI-RACMO22E_v1_day_20110101-20121231.nc?
+\subsection{Data restricted to `Non-Commercial usage only', by site}
+\begin{longtable}{|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Sl}} & \multicolumn{1}{c|}{\textbf{Site}} & \multicolumn{1}{c|}{\textbf{Data}}\endhead
+\hline
+1. & BADC & None \\
+\hline
+2. & DKRZ & None \\
+\hline 
+3. & DMI & None \\
+\hline
+4. & IPSL & None\\
+\hline
+5. & LIU-NSC & None\\
+\hline
+6. & UIO & None\\
+\hline
+\end{longtable}
+\captionof{table}{Data restricted to `non-commercial usage only', by site}
 \section{Acknowledgments}
 Many people have contributed to this document, pointing out errors and suggesting improvements. Thanks in particular to Katharina Berger and Stephanie Legutke of the DKRZ and Stephen Pascoe of the BADC for their suggestions.  Together, we hope to make the task of datanode administration a bit less of a hopeless task, with this reference manual!
