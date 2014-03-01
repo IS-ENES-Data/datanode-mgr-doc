@@ -4,6 +4,7 @@
 *.out
 *.toc
 *.aux
+*.bcf
 extpush.sh
 datanodemgr-doc-blx.bib
 datanodemgr-doc.run.xml
