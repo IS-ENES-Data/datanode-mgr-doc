@@ -87,6 +87,7 @@ File name: \texttt{/esg/config/esgf\_idp\_static.xml}
 	<value>https://esg2.nci.org.au/esgf-idp/idp/openidServer.htm</value>
 	<value>https://esg.bnu.edu.cn/esgf-idp/idp/openidServer.htm</value>
 	<value>https://esg.ccs.ornl.gov/esgf-idp/idp/openidServer.htm</value>
+	<value>https://esg.pik-potsdam.de/esgf-idp/idp/openidServer.htm</value>
 	<value>https://esg-datanode.jpl.nasa.gov/esgf-idp/idp/openidServer.htm</value>
 	<value>https://esg-dn1.nsc.liu.se/esgf-idp/idp/openidServer.htm</value>
 	<value>https://esgf-data.dkrz.de/esgf-idp/idp/openidServer.htm</value>
@@ -123,6 +124,7 @@ File name: \texttt{/esg/config/esgf\_shards\_static.xml}
     <!-- Europe -->
     <value>esgf-index1.ceda.ac.uk:8983/solr</value>
     <value>esgf-data.dkrz.de:8983/solr</value>
+    <value>esg-dn1.nsc.liu.se:8983/solr</value>
     <value>adm07.cmcc.it:8983/solr</value>
     <value>esgf-node.ipsl.fr:8983/solr</value>
     <value>noresg.norstore.uio.no:8983/solr</value>
@@ -206,15 +208,12 @@ Given below is a script that can generate a complete \texttt{model\_map} table, 
 \begin{tiny}
 \begin{verbatimtab}[4]
 #!/bin/bash
-
-curl -s 'http://cordex.dmi.dk/joomla/images/CORDEX/RCMModelName.txt'|grep -v '#'|grep 'confirmed'|tr -s ' ' >modelnames.txt
-nl=`cat modelnames.txt|wc -l`;
-echo "model_map = map(project,rcm_model : model)" >modelmap.txt
-for (( i=1; i<=nl; i++ )); do
-        ln=`cat modelnames.txt|head -$i|tail -1`;
+outp=`curl -s 'http://cordex.dmi.dk/joomla/images/CORDEX/RCMModelName.txt'|grep -v '#'|grep 'confirmed'|tr -s ' '`;
+echo "model_map = map(project,rcm_model : model)"
+echo "$outp" |while read ln; do
         inst=`echo $ln|cut -d' ' -f2`;
         res=`echo $ln| sed "s/$inst-\(.*\) \(.*\) confirmed/\tcordex| $inst-\1| \1/"`
-        echo -e "$res" >>modelmap.txt;
+        echo -e "$res"
 done
 
 model_map = map(project,rcm_model : model)
