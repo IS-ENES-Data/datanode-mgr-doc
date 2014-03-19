@@ -355,5 +355,55 @@ thredds_dataset_roots =
 \hline
 \end{longtable}
 \captionof{table}{Data restricted to `non-commercial usage only', by site}
+\section{Handy pre-publish tips}
+\subsection{Adding checksums}
+It's a good practice to publish data along with their checksums, so that silent corruption or download errors don't get away unnoticed. Generating checksums at publish time may drastically slow down a publication, so it's advisable to precompute them and then insert them into the mapfile. There are several ways in which one could generate checksums. I prefer to use \href{http://www.gnu.org/software/parallel}{gnu parallel} to speed things up.
+\begin{verbatimtab}
+time(find . -name '*.nc' -print| parallel sha256sum) >/unsorted-sha256sums \
+2>checksumout;
+cat unsorted-sha256sums|sort -k 2,2 >sha256sums;
+\end{verbatimtab}
+Generate the map file using the standard \texttt{esgscan\_directory} and then use the following python script to insert the checksums.
+\begin{verbatimtab}
+#!/usr/bin/python
+
+import os,sys
+mydict=dict()
+try:
+    checksumfile=sys.argv[1]
+    inpfile=sys.argv[2]
+    outfile=sys.argv[3]
+    fp=open(checksumfile,'r')
+    fp2=open(inpfile,'r')
+    fp3=open(outfile,'w')
+    cklines=fp.readlines()
+    fp.close()
+    for line in cklines:
+        lna=line.split(' ')
+        cksum=lna[0]
+        ffn=lna[len(lna)-1]
+        ffna=ffn.split('/')
+        fn=ffna[len(ffna)-1].split('\n')[0]
+        mydict[fn]=cksum
+
+    inplines=fp2.readlines()
+    fp2.close()
+    for line in inplines:
+        ffn=line.split(' ')[2]
+        ffna=ffn.split('/')
+        fn=ffna[len(ffna)-1]
+        cksum=mydict[fn]
+        mystr=line.split('\n')[0]
+        mystr=mystr+' | checksum='+cksum+' | checksum_type=sha256\n'
+        fp3.write(mystr)
+except:
+    print "Error accessing file or with finding precomputed checksum"
+    exit()
+fp3.close()
+\end{verbatimtab}
+Simply call the script like this:
+\begin{verbatimtab}
+python addchecksum.py <checksumfile> <mapfile> <outputfile>
+\end{verbatimtab}
 \section{Acknowledgments}
 Many people have contributed to this document, pointing out errors and suggesting improvements. Thanks in particular to Katharina Berger and Stephanie Legutke of the DKRZ and Stephen Pascoe of the BADC for their suggestions.  Together, we hope to make the task of datanode administration a bit less of a hopeless task, with this reference manual!
