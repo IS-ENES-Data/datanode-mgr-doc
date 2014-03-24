@@ -35,6 +35,7 @@ rcm_version=16:Downscaling realisation:optional_ds_description
 data_node=17:Data Node:optional_data_node_description
 \end{verbatimtab}
 \end{small}
+\newpage
 \section{ESGF Attribute Services}
 \label{attribservicesfile}
 File name: \texttt{/esg/config/esgf\_ats\_static.xml}\\
@@ -60,16 +61,17 @@ For information about how to setup your datanode to correctly enforce restrictio
                description="Users of CMIP5 data for commercial purposes"
                registrationService="https://pcmdi9.llnl.gov/esgf-idp/secure/registrationService.htm"/>
 
-    <attribute type="CORDEX_Commercial" attributeService="https://esg-dn1.nsc.liu.se/esgf-idp/saml/soap/secure/\
-	attributeService.htm" description="User group for possible commercial users of CORDEX data" registrationService="\
-	https://esg-dn1.nsc.liu.se/esgf-idp/secure/registrationService.htm"/>
-    <attribute type="CORDEX_Research" attributeService="https://esg-dn1.nsc.liu.se/esgf-idp/saml/soap/secure/\
-	attributeService.htm" description="User group for non-commercial users of CORDEX data only" registrationService="\
-	https://esg-dn1.nsc.liu.se/esgf-idp/secure/registrationService.htm"/>
+	<attribute type="CORDEX_Commercial"
+				attributeService="https://esg-dn1.nsc.liu.se/esgf-idp/saml/soap/secure/attributeService.htm"
+				description="User group for possible commercial users of CORDEX data"
+				registrationService="https://esg-dn1.nsc.liu.se/esgf-idp/secure/registrationService.htm"/>
+	<attribute type="CORDEX_Research"
+				attributeService="https://esg-dn1.nsc.liu.se/esgf-idp/saml/soap/secure/attributeService.htm"
+				description="User group for non-commercial users of CORDEX data only"
+				registrationService="https://esg-dn1.nsc.liu.se/esgf-idp/secure/registrationService.htm"/>
 </ats_whitelist>
 \end{verbatimtab}
 \end{tiny}
-
 \section{ESGF IDP Whitelist settings}
 File name: \texttt{/esg/config/esgf\_idp\_static.xml}
 \begin{tiny}
