@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<shards xmlns="http://www.esgf.org/whitelist">
+    <value>localhost:8983/solr</value>
+    <!-- US -->
+    <value>pcmdi9.llnl.gov:8983/solr</value>
+    <value>pcmdi11.llnl.gov:8983/solr</value>
+    <value>esg-datanode.jpl.nasa.gov:8983/solr</value>
+    <value>esg.ccs.ornl.gov:8983/solr</value>
+    <value>esgf.nccs.nasa.gov:8983/solr</value>
+    <value>esg01.nersc.gov:8983/solr</value>
+    <value>esgdata.gfdl.noaa.gov:8983/solr</value>
+    <value>hydra.fsl.noaa.gov:8983/solr</value>
+    
+    <!-- Europe -->
+    <value>esgf-index1.ceda.ac.uk:8983/solr</value>
+    <value>esgf-data.dkrz.de:8983/solr</value>
+    <value>esg-dn1.nsc.liu.se:8983/solr</value>
+    <value>adm07.cmcc.it:8983/solr</value>
+    <value>esgf-node.ipsl.fr:8983/solr</value>
+    <value>noresg.norstore.uio.no:8983/solr</value>
+    <value>cordexesg.dmi.dk:8983/solr</value>
+    <value>esg.pik-potsdam.de:8983/solr</value>
+    <value>esg2.e-inis.ie:8983/solr</value>
+  
+    <!-- Australia -->
+    <value>esg2.nci.org.au:8983/solr</value> 
+ 
+    <!-- Asia -->
+   <value>esg.bnu.edu.cn:8983/solr</value>
+</shards>

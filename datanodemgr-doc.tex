@@ -34,10 +34,11 @@
 \fancyhead{}
 \fancyfoot{}
 \lhead{\textsf{IS-ENES2 Datanode Administrator's Reference Manual}}
+\lfoot{\hyperlink{mytocmarker}{Contents}}
 \rhead{\thepage}
 
 % Remember to increment the version number
-\newcommand{\versionnum}{2014-1.13}
+\newcommand{\versionnum}{2014-1.14}
 
 \setsecnumdepth{subsubsection}
 \setcounter{tocdepth}{3}
@@ -62,10 +63,15 @@ Version: \textsc{\versionnum} \\
 \thispagestyle{empty}
 \titleSI
 \frontmatter
+\hypertarget{mytocmarker}
 \tableofcontents
 \mainmatter
 \input{doc.tex}
 \backmatter
+\appendix
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+\setcounter{secnumdepth}{0}
+\input{appendix.tex}
 \newgeometry{left=1cm,right=1cm,top=1in,bottom=1in}
 \begin{small}
 \printbibliography[title={References}]
