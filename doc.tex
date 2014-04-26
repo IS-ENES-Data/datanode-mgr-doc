@@ -261,7 +261,7 @@ thredds_dataset_roots =
 \hline
 2. & DKRZ & CLMcom data\\
 \hline 
-3. & DMI & None \\
+3. & DMI & HMS data\\
 \hline
 4. & IPSL & None\\
 \hline
@@ -274,6 +274,8 @@ thredds_dataset_roots =
 \end{longtable}
 \captionof{table}{Data restricted to `non-commercial usage only', by site}
 \section{Enabling Gridftp and OPeNDAP access}
+\label{gridftpaccess}
+\label{opendapaccess}
 In order to enable OPeNDAP access, simply ensure that the following lines are present in your \texttt{esg.ini} file:
 \begin{verbatimtab}[4]
 thredds_file_services =
@@ -281,6 +283,15 @@ thredds_file_services =
     GridFTP | gsiftp://<nodename>:2811/ | GRIDFTP | fileservice
     OpenDAP | /thredds/dodsC/ | OpenDAP | fileservice
 \end{verbatimtab}
+To allow incoming OpenDAP requests, you should also ensure that access is provided to CORDEX group members. It's done by putting these lines in the \texttt{/esg/config/esgf\_policies\_local.xml} file:
+\begin{tiny}
+\begin{verbatimtab}[4]
+<policy resource=".*dodsC.*cordex.*" attribute_type="CORDEX_Research" attribute_value="user" action="Read"/>
+<policy resource=".*dodsC.*cordex.*" attribute_type="CORDEX_Commercial" attribute_value="user" action="Read"/>
+<policy resource=".*cordex.*aggregation.*" attribute_type="CORDEX_Research" attribute_value="user" action="Read"/>
+<policy resource=".*cordex.*aggregation.*" attribute_type="CORDEX_Commercial" attribute_value="user" action="Read"/>
+\end{verbatimtab}
+\end{tiny}
 If you intend to offer gridftp, don't forget to allow inbound access to TCP port 2811
 \section{Handy pre-publish tips}
 \subsection{Adding checksums}
