@@ -12,10 +12,10 @@ The entire repository, which includes the \LaTeX{} source file can be cloned fro
 IS-ENES2 ESGF datanodes have some additional search facets pertaining to CORDEX. Here below are the entire list of facets used, on an IS-ENES2 ESGF datanode. This file is available in the `\textbf{configfiles}' directory in the \href{https://github.com/snic-nsc/datanode-mgr-doc.git}{repo}. \\
 Filename: \texttt{facets.properties}\\
 Standard location: \texttt{/esg/config/facets.properties}
-\begin{small}
+\begin{footnotesize}
 \begin{verbatimtabinput}[4]{configfiles/facets.properties}
 \end{verbatimtabinput}
-\end{small}
+\end{footnotesize}
 \newpage
 \section{ESGF Attribute Services}
 \label{attribservicesfile}
@@ -57,8 +57,8 @@ Given below are examples of valid and invalid directory structures.\\
 \texttt{/corddata/output/...} \xmark{ } //non-standard name corresponding to `Project'.  \\ 
 \texttt{/cordex/AFR-44/...} \xmark{ } //there is no directory corresponding to `Product'. Here is a complete \texttt{directory\_format} line, for reference:
 \begin{verbatim}
-directory_format = /localpath/cordex/%(product)s/%(domain)s/%(institute)s/\
-%(driving_model)s/%(experiment)s/%(ensemble)s/%(rcm_model)s/%(rcm_version)s/\
+directory_format = %(root)s/cordex/%(product)s/%(domain)s/%(institute)s/\
+%(driving_model)s/%(experiment)s/%(ensemble)s/%(rcm_models/%(rcm_version)s/\
 %(time_frequency)s/%(variable)s/v%(version)s
 \end{verbatim}
 
@@ -99,39 +99,41 @@ find . -name '*.nc' -exec bash <script home>/exclvarcheck.sh {} \;
 \item The file \texttt{/tmp/ncchecks/notfound} will list cases, if any, where a variable after which the file is named, isn't present in the file itself!
 \item If you indeed find variables that need to be added to the list of excluded variables, please let me know 
 \end{enumerate}
-\section{Value for the `Model' facet}
-It was decided that the value of the `Model' facet should NOT contain the institute information, as this information is already captured and presented by the `Institute' facet.  However, the directory corresponding to the `Model' contains the name of the institute too, along with the model name, as stipulated by the CORDEX archive specifications \footnote{``RCMModelName is an alphanumeric identifier chosen by the modeling group; it should consist of an institute acronym and a model acronym, connected by a dash, e.g., DMI-HIRHAM5 or SMHI-RCA3.''\cite{cordexarchivespecs}}. This results in the requirement for some special handling.
+\section{Value for the RCMModelName facet}
+It was decided that the value of the `rcm\_name' facet should NOT contain the institute information, as this information is already captured and presented by the `Institute' facet.  However, the directory corresponding to the `rcm\_model' contains the name of the institute too, along with the model name, as stipulated by the CORDEX archive specifications \footnote{``RCMModelName is an alphanumeric identifier chosen by the modeling group; it should consist of an institute acronym and a model acronym, connected by a dash, e.g., DMI-HIRHAM5 or SMHI-RCA3.''\cite{cordexarchivespecs}}. This results in the requirement for some special handling.
 \mypar
 The easiest way to handle this is by creating a substitution map for the variable.
 \begin{enumerate}
 \item Under the options for \texttt{[project:cordex]}, find the configuration line that says \texttt{maps}
+\item Add the \texttt{rcm\_name} categorie:\\
+\texttt{categories =\\ rcm\_name | string | false | true  | 7}
 \item Edit the line to say the following:\\
-\texttt{maps = model\_map,institute\_map, las\_time\_delta\_map, domain\_map}
-\item Create a new map `model\_map' and populate it with entries that correspond to  the models that you handle, leaving out the institute part in the last field.
+\texttt{maps = rcm\_name\_map,institute\_map, las\_time\_delta\_map, domain\_map}
+\item Create a new map `rcm\_name\_map' and populate it with entries that correspond to  the models that you handle, leaving out the institute part in the last field.
 \item Look at the example below for reference:
 \begin{verbatimtab}[4]
-model_map = map(project,rcm_model : model)
+rcm_name_map = map(project,rcm_model : rcm_name)
     cordex |SMHI-RCA4| RCA4
     cordex |SMHI-RCA4-SN| RCA4-SN
 \end{verbatimtab}
-\item Use the regex `model' in the place of the directory corresponding to the model directory, in the \texttt{dataset\_id} string.
+\item Use the regex `rcm\_name' in the place of the directory corresponding to the model directory, in the \texttt{dataset\_id} string.
 \vspace{-6mm}\\
 \begin{verbatimtab}[4]
 dataset_id = cordex.%(product)s.%(domain)s.%(institute)s.%(driving_model)s.\
-%(experiment)s.%(ensemble)s.%(model)s.%(rcm_version)s.%(time_frequency)s.\
+%(experiment)s.%(ensemble)s.%(rcm_name)s.%(rcm_version)s.%(time_frequency)s.\
 %(variable)s
 \end{verbatimtab}
 \end{enumerate}
-\subsection{Complete \texttt{model\_map}}
+\subsection{Complete \texttt{rcm\_name\_map}}
 The current and comprehensive list of CORDEX models may be obtained from:\\
 \url{http://cordex.dmi.dk/joomla/images/CORDEX/RCMModelName.txt}. \\
-Given below is a script that can generate a complete \texttt{model\_map} table, that could then be pasted into the ini file. This script is available in the `\textbf{scripts}' directory in the \href{https://github.com/snic-nsc/datanode-mgr-doc.git}{repo}. Also produced here is the full output of the script. 
+Given below is a script that can generate a complete \texttt{rcm\_name\_map} table, that could then be pasted into the ini file. This script is available in the `\textbf{scripts}' directory in the \href{https://github.com/snic-nsc/datanode-mgr-doc.git}{repo}. Also produced here is the full output of the script. 
 \begin{tiny}
 \begin{verbatimtabinput}[4]{scripts/makemodelmap.sh}
 \end{verbatimtabinput}
 \vspace{-8mm}
 \begin{verbatimtab}[4]
-model_map = map(project,rcm_model : model)
+rcm_name_map = map(project,rcm_model : rcm_name)
         cordex| AUTH-LHTEE-WRF321B| WRF321B
         cordex| AUTH-Met-WRF331A| WRF331A
         cordex| AWI-HIRHAM5| HIRHAM5
@@ -170,7 +172,7 @@ model_map = map(project,rcm_model : model)
 \end{tiny}
 
 \section{\texttt{esgcet\_models\_table.txt}}
-Apart from the model map, another map that lists models and their parent organizations is the \texttt{/esg/config/esgcet\_models\_table.txt}. After making any changes to it, one needs to execute \texttt{esginitialize -c}, to update it, and if that doesn't work, you may need to `downgrade' the database by excuting \texttt{esginitialize \myopt d0} and then executing \texttt{esginitialize -c}.
+Apart from the rcm\_name map, another map that lists models and their parent organizations is the \texttt{/esg/config/esgcet\_models\_table.txt}. After making any changes to it, one needs to execute \texttt{esginitialize -c}, to update it, and if that doesn't work, you may need to `downgrade' the database by excuting \texttt{esginitialize \myopt d0} and then executing \texttt{esginitialize -c}.
 \begin{tiny}
 \begin{verbatim}
   test | test | http://www-pcmdi.llnl.gov | Test
